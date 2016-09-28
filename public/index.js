@@ -24,12 +24,12 @@ var makeQuiz = function(countries){
     var countryObject = {
       countryName: countries[index].name,
       population: countries[index].population,
-      latLng: {
+      latlng: {
         lat: countries[index].latlng[0],
         lng: countries[index].latlng[1]
       }
     };
-    console.log()
+    console.log(countryObject.latlng)
     quiz.push(countryObject);
   }
   console.log(quiz, " quiz so far")
