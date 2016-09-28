@@ -1,3 +1,8 @@
+var quizCounter = 0;
+var quiz = [];
+var score = 0;
+var map;
+
 var makeRequest = function(url, callback){
   var request = new XMLHttpRequest();
   request.open("GET", url);
@@ -12,11 +17,6 @@ var processData = function(){
   makeQuiz(countries);
   generateQuestion();
 }
-
-var quizCounter = 0;
-var quiz = [];
-var score = 0;
-var map;
 
 var makeQuiz = function(countries){
   for (var i = 0; i < 11; i++){
@@ -34,6 +34,24 @@ var makeQuiz = function(countries){
   }
 }
 
+var generateQuestion = function(){
+  var question=document.querySelector('#question');
+  
+  if((quiz.length - 1) > quizCounter){
+    var questionText = "Is " + quiz[quizCounter].countryName +"'s (" + quiz[quizCounter].population + ") population greater or less than " + quiz[quizCounter+1].countryName
+
+    question.innerText=questionText;
+
+    mapCenterAndMark(quiz[quizCounter+1])
+    quizCounter ++
+  }else{
+    buttons = document.querySelectorAll("button")
+    buttons.forEach(function(button){button.disabled = true})
+    question.innerText = "End of the game. Your score was: " + score;
+    document.querySelector("#score").style.visibility = "hidden"
+  }
+}
+
 var mapCenterAndMark = function(country){
   map.setCenter(country.latlng)
   var marker = new google.maps.Marker({
@@ -43,28 +61,7 @@ var mapCenterAndMark = function(country){
   })
 }
 
-var generateQuestion = function(){
-  var question=document.querySelector('#question');
-  
-  if((quiz.length - 1) > quizCounter){
-
-    var questionText = "Is " + quiz[quizCounter].countryName +"'s (" + quiz[quizCounter].population + ") population greater or less than " + quiz[quizCounter+1].countryName
-
-    question.innerText=questionText;
-
-    mapCenterAndMark(quiz[quizCounter+1])
-    quizCounter ++
-  }else{
-    // var endGame = "End of the game"
-    buttons = document.querySelectorAll("button")
-    buttons.forEach(function(button){button.disabled = true})
-    question.innerText = "End of the game. Your score was: " + score;
-    document.querySelector("#score").style.visibility = "hidden"
-  }
-}
-
 var moreClick = function(){
-  // console.log("more")
   compareAnswer("more");
   generateQuestion()
 }
@@ -80,8 +77,6 @@ var compareAnswer = function(guess){
 
   if (guess === answer){
     score ++
-  } else {
-    console.log("you're bad and you should feel bad")
   }
   updateScore();
 }
@@ -105,14 +100,7 @@ var app = function(){
   map = new google.maps.Map(
     document.querySelector("#map"),
     {center: {lat: 0, lng: 0} , zoom: 5});
-
-
-  // makeQuiz(countries);
-  // var question = document.querySelector
 }
-
-
-
 
 
 window.onload = app;
