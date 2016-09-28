@@ -16,6 +16,7 @@ var processData = function(){
 var quizCounter = 0;
 var quiz = [];
 var score = 0;
+var map;
 
 var makeQuiz = function(countries){
   for (var i = 0; i < 11; i++){
@@ -29,10 +30,17 @@ var makeQuiz = function(countries){
         lng: countries[index].latlng[1]
       }
     };
-    console.log(countryObject.latlng)
     quiz.push(countryObject);
   }
-  console.log(quiz, " quiz so far")
+}
+
+var mapCenterAndMark = function(country){
+  map.setCenter(country.latlng)
+  var marker = new google.maps.Marker({
+    position: country.latlng,
+    map: map,
+    animation: google.maps.Animation.BOUNCE
+  })
 }
 
 var generateQuestion = function(){
@@ -40,11 +48,13 @@ var generateQuestion = function(){
   
   if((quiz.length - 1) > quizCounter){
 
-    var questionText = "Is " + quiz[quizCounter].countryName +"'s " + quiz[quizCounter].population + " population greater or less than " + quiz[quizCounter+1].countryName + quiz[quizCounter+1].population;
+    var questionText = "Is " + quiz[quizCounter].countryName +"'s (" + quiz[quizCounter].population + ") population greater or less than " + quiz[quizCounter+1].countryName
+
     question.innerText=questionText;
+
+    mapCenterAndMark(quiz[quizCounter+1])
     quizCounter ++
-  }
-  else{
+  }else{
     // var endGame = "End of the game"
     buttons = document.querySelectorAll("button")
     buttons.forEach(function(button){button.disabled = true})
@@ -66,7 +76,6 @@ var lessClick = function(){
 }
 
 var compareAnswer = function(guess){
-
   var answer = quiz[quizCounter-1].population > quiz[quizCounter].population ? "more" : "less";
 
   if (guess === answer){
@@ -93,9 +102,17 @@ var app = function(){
   var buttonLess = document.querySelector("#less");
   buttonLess.onclick = lessClick;
 
+  map = new google.maps.Map(
+    document.querySelector("#map"),
+    {center: {lat: 0, lng: 0} , zoom: 5});
+
+
   // makeQuiz(countries);
   // var question = document.querySelector
 }
+
+
+
 
 
 window.onload = app;
