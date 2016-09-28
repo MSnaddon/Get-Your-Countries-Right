@@ -12,6 +12,7 @@ var processData = function(){
   makeQuiz(countries);
 }
 
+var quizCounter = 0;
 var quiz = [{countryName: "afghanistan", population: 7},{countryName: "edinburgh", population: 8}]
 
 var makeQuiz = function(countries){
@@ -25,15 +26,41 @@ var makeQuiz = function(countries){
   console.log(quiz, " quiz so far")
 }
 
+var generateQuestion = function(){
+
+  var questionText = "Is " + quiz[quizCounter].countryName +"'s population greater or less than " + quiz[quizCounter+1];
+  var question=document.querySelector('#question');
+  question.innerText=questionText;
+    
+  quizCounter ++
+}
+
+var moreClick = function(){
+  // console.log("more")
+  
+  generateQuestion()
+}
+
+var lessClick = function(){
+  // console.log("less")
+  
+  generateQuestion()
+}
 
 
 
 var app = function(){
-  var url = "https://restcountries.eu/rest/v1";
+  var url = "http://localhost:5000";
   makeRequest(url, processData);
+
+  var buttonMore = document.querySelector("#more");
+  buttonMore.onclick = moreClick;
+
+  var buttonLess = document.querySelector("#less");
+  buttonLess.onclick = lessClick;
+
+  // var question = document.querySelector
 }
-
-
 
 
 window.onload = app;
