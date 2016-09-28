@@ -67,7 +67,6 @@ var moreClick = function(){
 }
 
 var lessClick = function(){
-  // console.log("less")
   compareAnswer("less");
   generateQuestion()
 }
